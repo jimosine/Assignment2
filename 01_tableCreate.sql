@@ -17,3 +17,4 @@ CREATE TABLE superhero (
    id serial PRIMARY KEY,
    name varchar(50),
    description varchar(250));
+
