@@ -1,5 +1,5 @@
 ALTER TABLE assistant
-ADD CONSTRAINT name UNIQUE (name);
+ADD CONSTRAINT constraint_name UNIQUE (name);
 
 DELETE FROM assistant 
 WHERE name = 'Rhaegal';
