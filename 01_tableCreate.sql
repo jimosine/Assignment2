@@ -1,17 +1,20 @@
-CREATE TABLE Superhero (
-Id SERIAL PRIMARY KEY,
-Name varchar(200),
-Alias varchar(200),
-Origin varchar(200)
-);
+DROP TABLE IF EXISTS power;
+DROP TABLE IF EXISTS assistant;
+DROP TABLE IF EXISTS superhero;
 
-CREATE TABLE Assistant (
-Id SERIAL PRIMARY KEY,
-Name varchar(200)
-);
 
-CREATE TABLE Power (
-Id SERIAL PRIMARY KEY,
-Name varchar(200),
-Description varchar(200)
-);
+CREATE TABLE superhero (
+  id serial PRIMARY KEY,
+  name varchar(50),
+  alias varchar(50),
+  origin varchar(50));
+  
+ CREATE TABLE assistant (
+   id serial PRIMARY KEY,
+   name varchar(50));
+   
+ CREATE TABLE power (
+   id serial PRIMARY KEY,
+   name varchar(50),
+   description varchar(250));
+
