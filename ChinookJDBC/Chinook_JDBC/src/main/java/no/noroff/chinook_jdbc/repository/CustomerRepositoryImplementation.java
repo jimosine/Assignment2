@@ -87,6 +87,35 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
     }
 
     @Override
+    public List<Customer> findSubset(int limit, int offset) {
+        String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, " +
+                "email FROM customer LIMIT ? OFFSET ?";
+        List<Customer> customers = new ArrayList<>();
+        try (Connection conn =DriverManager.getConnection(url,username, password)){
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, limit);
+            statement.setInt(2, offset);
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                Customer customer = null;
+                customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customers;
+    }
+
+    @Override
     public int insert(Customer object) {
         return 0;
     }
@@ -105,4 +134,5 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
     public int deleteById(Integer id) {
         return 0;
     }
+
 }
