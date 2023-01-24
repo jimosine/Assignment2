@@ -15,5 +15,6 @@ public class Runner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("hello world");
+        System.out.println(customerRepositoryImpl.findById(1));
     }
 }
