@@ -4,9 +4,7 @@ import no.noroff.chinook_jdbc.models.Customer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 @Repository
@@ -42,7 +40,28 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
 
     @Override
     public Customer findById(Integer id) {
-        return null;
+        String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, " +
+                "email FROM customer WHERE customer_id = ?";
+        Customer customer = null;
+        try (Connection conn = DriverManager.getConnection(url, username, password)){
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customer;
     }
 
     @Override
