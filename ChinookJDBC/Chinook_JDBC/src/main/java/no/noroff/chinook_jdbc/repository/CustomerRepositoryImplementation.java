@@ -86,7 +86,7 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customer;
     }
 
-    @Override
+    @Override   // method to find a customer which first or last name fits specified pattern
     public List<Customer> findSubset(int limit, int offset) {
         String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, " +
                 "email FROM customer LIMIT ? OFFSET ?";
