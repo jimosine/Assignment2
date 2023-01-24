@@ -1,6 +1,7 @@
 package no.noroff.chinook_jdbc.repository;
 
 import no.noroff.chinook_jdbc.models.Customer;
+import no.noroff.chinook_jdbc.models.CustomerCountry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -147,6 +148,26 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
     @Override
     public int insert(Customer object) {
         return 0;
+    }
+
+    @Override
+    public CustomerCountry findCountryWithMostCustomers() {
+        CustomerCountry country = null;
+        String sql = "SELECT country, COUNT(*) AS frequency " +
+                "FROM customer " +
+                "GROUP BY country " +
+                "ORDER BY frequency DESC " +
+                "LIMIT 1";
+        try (Connection connection = DriverManager.getConnection(url,username,password)){
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                country = new CustomerCountry(result.getString("country"),result.getInt("frequency"));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return country;
     }
 
     @Override

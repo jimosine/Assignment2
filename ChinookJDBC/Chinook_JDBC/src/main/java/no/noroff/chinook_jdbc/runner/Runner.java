@@ -15,8 +15,9 @@ public class Runner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         System.out.println("hello world");
-        System.out.println(customerRepositoryImpl.findByName("Luis"));
-        System.out.println(customerRepositoryImpl.findByName("ui"));
+        System.out.println(customerRepositoryImpl.findCountryWithMostCustomers());
+//        System.out.println(customerRepositoryImpl.findByName("Luis"));
+//        System.out.println(customerRepositoryImpl.findByName("ui"));
 //        System.out.println(customerRepositoryImpl.findSubset(3, 3));
 //        System.out.println(customerRepositoryImpl.findById(1));
 //        System.out.println(customerRepositoryImpl.findAll());
