@@ -120,9 +120,25 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return 0;
     }
 
+    //I don't know exactly what and how they want us to update.
+    //This now just changes the customers first name to uppercase.
+    //The commented line can change it back to original name.
     @Override
-    public int update(Customer object) {
-        return 0;
+    public int update(Customer customer) {
+        String sql = "UPDATE customer SET first_name = ? WHERE customer_id = ?";
+        int result = 0;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+//            statement.setString(1, "Bjørn");
+            statement.setString(1, customer.first_name().toUpperCase());
+            statement.setInt(2, customer.customer_id());
+            // Execute statement
+            result = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
