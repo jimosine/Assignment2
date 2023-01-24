@@ -8,6 +8,7 @@ public class ChinookJdbcApplication {
 	// main method
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ChinookJdbcApplication.class, args);
 	}
 
