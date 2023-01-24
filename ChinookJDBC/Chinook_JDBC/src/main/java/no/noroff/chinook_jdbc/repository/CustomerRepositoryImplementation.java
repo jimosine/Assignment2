@@ -1,6 +1,8 @@
 package no.noroff.chinook_jdbc.repository;
 
 import no.noroff.chinook_jdbc.models.Customer;
+import no.noroff.chinook_jdbc.models.CustomerCountry;
+import no.noroff.chinook_jdbc.models.CustomerSpender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -113,6 +115,27 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
             throw new RuntimeException(e);
         }
         return customers;
+    }
+
+    //Just return the customer id, would like to also return his total spending's
+    //but don't know the result column name for this.
+    @Override
+    public CustomerSpender findHighestSpender() {
+        String sql = "SELECT customer_id, MAX(total) FROM invoice GROUP BY customer_id";
+        CustomerSpender customer = null;
+        try (Connection conn = DriverManager.getConnection(url, username, password)){
+            PreparedStatement statement = conn.prepareStatement(sql);
+            ResultSet result = statement.executeQuery();
+            while (result.next()){
+                customer = new CustomerSpender(
+                        result.getInt("customer_id")
+                        //result.getInt("total")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customer;
     }
 
     @Override
