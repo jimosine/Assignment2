@@ -32,19 +32,21 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         testConnection();
     }
 
+
     /**
      This method tests the connection to the database using the provided url, username, and password.
      It creates a connection to the database using the DriverManager class and the provided url, username and password.
      If the connection is successful, it prints "conn" to the console. If it fails, it prints the error message.
      @throws SQLException if there is an error connecting to the database
      */
+
+
     public void testConnection() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             System.out.println("conn");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
     }
 
     /**
@@ -176,10 +178,10 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
                 "SUM(invoice.total) as total FROM customer JOIN invoice ON customer.customer_id = invoice.customer_id" +
                 " GROUP BY customer.customer_id ORDER BY total DESC LIMIT 1";
         CustomerSpender customer = null;
-        try (Connection conn = DriverManager.getConnection(url, username, password)){
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = conn.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
-            while (result.next()){
+            while (result.next()) {
                 customer = new CustomerSpender(
                         result.getInt("customer_id"),
                         result.getString("first_name"),
@@ -282,11 +284,11 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
                 "GROUP BY country " +
                 "ORDER BY frequency DESC " +
                 "LIMIT 1";
-        try (Connection connection = DriverManager.getConnection(url,username,password)){
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet result = statement.executeQuery();
             while (result.next()) {
-                country = new CustomerCountry(result.getString("country"),result.getInt("frequency"));
+                country = new CustomerCountry(result.getString("country"), result.getInt("frequency"));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -310,7 +312,11 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         String sql = "UPDATE customer SET first_name = ?, last_name = ?, " +
                 "country =?, postal_code =?, phone=?, email =? WHERE customer_id = ?";
         int result = 0;
-        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+
+
+
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            // Write statement
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, customer.first_name());
             statement.setString(2, customer.last_name());
@@ -352,7 +358,7 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
                 "WHERE customer.customer_id = ?\n" +
                 "GROUP BY customer.customer_id, genre.genre_id, genre.name\n" +
                 "ORDER BY frequency DESC FETCH FIRST 1 ROWS WITH TIES";
-        try(Connection connection = DriverManager.getConnection(url,username,password)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, customerId);
             ResultSet result = statement.executeQuery();
@@ -368,10 +374,7 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
         return popularGenres;
-
     }
 
 
