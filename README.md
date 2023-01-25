@@ -25,10 +25,10 @@ To use the wrapper  to build the project:
 `cd ChinookJDBC/Chinook_JDBC`
 
 To build the project:
-`/gradlew build`
+`./gradlew build` or `bash ./gradlew build`
 
 To run the project:
-`./gradlew run`
+`./gradlew run` or `bash ./gradlew run`
 
 Alternatively:
 Open the project in IntelliJ Ultimate with JDK 17.

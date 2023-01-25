@@ -376,15 +376,4 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         }
         return popularGenres;
     }
-
-
-    @Override
-    public int delete(Customer object) {
-        return 0;
-    }
-
-    @Override
-    public int deleteById(Integer id) {
-        return 0;
-    }
 }
