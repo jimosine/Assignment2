@@ -1,6 +1,7 @@
 package no.noroff.chinook_jdbc.repository;
 
 import no.noroff.chinook_jdbc.models.Customer;
+import no.noroff.chinook_jdbc.models.CustomerGenre;
 import no.noroff.chinook_jdbc.models.CustomerCountry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -201,4 +202,37 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return 0;
     }
 
+    @Override
+    public List<CustomerGenre> findMostPopularGenreForCustomer(int customerId) {
+        List<CustomerGenre> popularGenres = new ArrayList<>();
+        String sql = "SELECT customer.customer_id, genre.genre_id, genre.name , COUNT(genre.genre_id) AS frequency\n" +
+                "FROM customer\n" +
+                "INNER JOIN invoice ON customer.customer_id = invoice.customer_id\n" +
+                "INNER JOIN invoice_line ON invoice.invoice_id = invoice_line.invoice_id\n" +
+                "INNER JOIN track ON invoice_line.track_id = track.track_id\n" +
+                "INNER JOIN genre ON track.genre_id = genre.genre_id\n" +
+                "WHERE customer.customer_id = ?\n" +
+                "GROUP BY customer.customer_id, genre.genre_id, genre.name\n" +
+                "ORDER BY frequency DESC FETCH FIRST 1 ROWS WITH TIES";
+        try(Connection connection = DriverManager.getConnection(url,username,password)) {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, customerId);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                CustomerGenre genre = new CustomerGenre(
+                        result.getInt("customer_id"),
+                        result.getInt("genre_id"),
+                        result.getString("name"),
+                        result.getInt("frequency")
+                );
+                popularGenres.add(genre);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return popularGenres;
+
+    }
 }
