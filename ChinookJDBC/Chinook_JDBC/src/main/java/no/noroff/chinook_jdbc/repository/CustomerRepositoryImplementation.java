@@ -32,6 +32,12 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         testConnection();
     }
 
+    /**
+     This method tests the connection to the database using the provided url, username, and password.
+     It creates a connection to the database using the DriverManager class and the provided url, username and password.
+     If the connection is successful, it prints "conn" to the console. If it fails, it prints the error message.
+     @throws SQLException if there is an error connecting to the database
+     */
     public void testConnection() {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             System.out.println("conn");
@@ -41,6 +47,15 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
 
     }
 
+    /**
+     This method finds all customers from the customer table using a SQL query. The method establishes a connection to
+     the database using the DriverManager class and the provided url, username and password. Then, the method
+     prepares a SQL statement that selects all customers from the customer table. The method then executes the query
+     and processes the result set to create a new List of Customer objects containing the information such as id, first
+     name, last name, country, postal code, phone, and email.
+     @return A list of all customers in the table
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public List<Customer> findAll() {
         String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, email FROM customer";
@@ -67,6 +82,16 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customers;
     }
 
+    /**
+     This method finds a customer by their ID using a SQL query. The method establishes a connection to the database
+     using the DriverManager class and the provided url, username and password. Then, the method prepares a SQL statement
+     that selects the customer with the matching ID from the customer table. The method then sets the id passed in the
+     parameter to the prepared statement, executes the query and processes the result set to create a new Customer object
+     containing the customer's information such as id, first name, last name, country, postal code, phone, and email.
+     @param id The ID of the customer to find
+     @return The customer with the matching ID, or null if no customer with the given ID is found
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public Customer findById(Integer id) {
         String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, " +
@@ -93,7 +118,20 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customer;
     }
 
-    @Override   // method to find a customer which first or last name fits specified pattern
+    /**
+     This method finds a subset of customers from the customer table using a SQL query. The method establishes a
+     connection to the database using the DriverManager class and the provided url, username and password. Then, the
+     method prepares a SQL statement that selects a limited and offset subset of the customers from the customer table.
+     The method then sets the limit and offset passed in the parameter to the prepared statement, executes the query and
+     processes the result set to create a new List of Customer objects containing the subset of customers information
+     such as id, first name, last name, country, postal code, phone, and email.
+     @param limit The maximum number of customers to return
+     @param offset The number of customers to skip before starting to return them
+     @return A list of customers that is a subset of the customers in the table, with a maximum length of 'limit' and
+     starts from the 'offset' number customer_id
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException */
+
+    @Override
     public List<Customer> findSubset(int limit, int offset) {
         String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, " +
                 "email FROM customer LIMIT ? OFFSET ?";
@@ -122,8 +160,16 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customers;
     }
 
-    //Just return the customer id, would like to also return his total spending's
-    //but don't know the result column name for this.
+    /**
+     This method finds the highest spending customer from the customer and invoice tables, using a SQL query. The method
+     establishes a connection to the database using the DriverManager class and the provided url, username and
+     password. Then, the method prepares a SQL statement that joins the customer and invoice tables, groups the results
+     by customer id, and orders the results by the total amount spent. The method then executes the query and processes
+     the result set to create a new CustomerSpender object containing the highest spender's information such as id,
+     first name, last name, and total amount spent.
+     @return A CustomerSpender object containing the highest spender's information, or null if no customer is found
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public CustomerSpender findHighestSpender() {
         String sql = "SELECT customer.customer_id, customer.first_name, customer.last_name, " +
@@ -147,6 +193,17 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customer;
     }
 
+    /**
+     This method finds customers from the customer table by their name using a SQL query. The method establishes a
+     connection to the database using the DriverManager class and the provided url, username and password. Then, the
+     method prepares a SQL statement that selects customers from the customer table whose last name or first name match
+     the provided name (case-insensitive). The method then sets the parameter name to the prepared statement, and
+     executes the query, processing the result set to create a new List of Customer objects containing the information
+     such as id, first name, last name, country, postal code, phone, and email.
+     @param name The name to search for in the customer's first and last name
+     @return A list of customers whose first or last name match the provided name
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public List<Customer> findByName(String name) {
         String sql = "SELECT customer_id, first_name, last_name, country, postal_code, phone, email FROM customer " +
@@ -176,6 +233,15 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return customers;
     }
 
+    /**
+     This method inserts a new customer into the customer table in the database using a SQL query. The method
+     establishes a connection to the database using the DriverManager class and the provided url, username and password.
+     Then, the method prepares a SQL statement that inserts a new customer into the customer table. The method sets the
+     fields of the customer object passed in the parameter to the prepared statement, and executes the query.
+     @param customer The customer object containing the information of the customer to insert
+     @return The number of rows affected by the insert query, should be 1 if the customer is inserted successfully
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public int insert(Customer customer) {
         String sql = "INSERT INTO customer (first_name, last_name, country, postal_code, phone, email) " +
@@ -197,6 +263,17 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return result;
     }
 
+    /**
+     This method finds the country with the most customers from the customer table using a SQL query. The method
+     establishes a connection to the database using the DriverManager class and the provided url, username and password.
+     Then, the method prepares a SQL statement that groups the customers by country and orders the results by the
+     frequency of customers of each country, and then limits the result to the top one. The method then executes the
+     query and processes the result set to create a new CustomerCountry object containing the country with the most
+     customers and the frequency of customers in that country.
+     @return A CustomerCountry object containing the country name with the most customers and the frequency of customers
+     in that country, or null if no customer is found
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public CustomerCountry findCountryWithMostCustomers() {
         CustomerCountry country = null;
@@ -217,16 +294,23 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return country;
     }
 
-    //I don't know exactly what and how they want us to update.
-    //This now just changes the customers first name to uppercase.
-    //The commented line can change it back to original name.
+    /**
+     This method updates the information of a customer in the customer table using a SQL query.The method establishes a
+     connection to the database using the DriverManager class and the provided url, username and password. Then, the
+     method prepares a SQL statement that updates the customer's information in the customer table. The method sets the
+     fields of the customer object passed in the parameter such as first name, last name, country, postal code, phone,
+     and email to the prepared statement and set the customer id as the where clause. Then, the method executes the
+     query and returns the number of rows affected by the update query.
+     @param customer The customer object containing the updated information
+     @return The number of rows affected by the update query
+     @throws SQLException if there is an error executing the SQL query
+     */
     @Override
     public int update(Customer customer) {
         String sql = "UPDATE customer SET first_name = ?, last_name = ?, " +
                 "country =?, postal_code =?, phone=?, email =? WHERE customer_id = ?";
         int result = 0;
         try(Connection conn = DriverManager.getConnection(url, username,password)) {
-            // Write statement
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setString(1, customer.first_name());
             statement.setString(2, customer.last_name());
@@ -242,16 +326,20 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         return result;
     }
 
-    @Override
-    public int delete(Customer object) {
-        return 0;
-    }
-
-    @Override
-    public int deleteById(Integer id) {
-        return 0;
-    }
-
+    /**
+     This method finds the most popular genre for a customer from the customer, invoice, invoice_line, track and genre
+     tables in a database, using a SQL query. The method establishes a connection to the database using the
+     DriverManager class and the provided url, username and password. Then, the method prepares a SQL statement
+     that joins the customer, invoice, invoice_line, track and genre tables and groups the results by customer id,
+     genre id and genre name. Then, the method filters the result by the provided customer id and orders the
+     results by the frequency of each genre. The method then limits the result to the top one with ties. The method then
+     executes the query and processes the result set to create a new List of CustomerGenre objects containing the
+     customer id, genre id, genre name and frequency of the most popular genre for that customer.
+     @param customerId The id of the customer
+     @return A list of CustomerGenre objects containing the most popular genre for the provided customer id, or an empty
+     list if no genre is found
+     @throws RuntimeException if there is an error executing the SQL query, such as an SQLException
+     */
     @Override
     public List<CustomerGenre> findMostPopularGenreForCustomer(int customerId) {
         List<CustomerGenre> popularGenres = new ArrayList<>();
@@ -284,5 +372,16 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
 
         return popularGenres;
 
+    }
+
+
+    @Override
+    public int delete(Customer object) {
+        return 0;
+    }
+
+    @Override
+    public int deleteById(Integer id) {
+        return 0;
     }
 }
