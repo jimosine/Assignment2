@@ -10,7 +10,7 @@ public interface CRUDRepository<T, U> {
 
     int insert(T object);
 
-    void update(T object);
+    int update(T object);
 
     int delete(T object);
 

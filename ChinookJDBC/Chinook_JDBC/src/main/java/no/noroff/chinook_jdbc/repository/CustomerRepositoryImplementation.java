@@ -124,7 +124,7 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
     //This now just changes the customers first name to uppercase.
     //The commented line can change it back to original name.
     @Override
-    public void update(Customer customer) {
+    public int update(Customer customer) {
         String sql = "UPDATE customer SET first_name = ?, last_name = ?, " +
                 "country =?, postal_code =?, phone=?, email =? WHERE customer_id = ?";
         int result = 0;
@@ -142,6 +142,7 @@ public class CustomerRepositoryImplementation implements CustomerRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return result;
     }
 
     @Override
