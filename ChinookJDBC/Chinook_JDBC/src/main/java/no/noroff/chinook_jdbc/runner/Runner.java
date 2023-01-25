@@ -22,8 +22,8 @@ public class Runner implements ApplicationRunner {
 
         //So I guess we need to create a Customer object, which we can just do like this
         //and then we can update.
-        Customer bjorn = customerRepositoryImpl.findById(4);
-        customerRepositoryImpl.update(bjorn);
-        System.out.println(customerRepositoryImpl.findById(4));
+        Customer test = new Customer(59, "John", "Doe", "", "", "", "");
+        customerRepositoryImpl.update(test);
+        System.out.println(customerRepositoryImpl.findById(59));
     }
 }
