@@ -1,9 +1,7 @@
 package no.noroff.chinook_jdbc.repository;
 
 import no.noroff.chinook_jdbc.models.Customer;
-
 import no.noroff.chinook_jdbc.models.CustomerSpender;
-
 import no.noroff.chinook_jdbc.models.CustomerGenre;
 import no.noroff.chinook_jdbc.models.CustomerCountry;
 
